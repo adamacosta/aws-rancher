@@ -1,0 +1,28 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+packages:
+  - bash-completion
+  - bind-utils
+  - git
+  - jq
+  - parted
+  - unzip
+write_files:
+  - content: |
+      Defaults secure_path="/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/local/bin"
+    path: /etc/sudoers.d/20-secure-path
+  - content: |
+      br_netfilter
+      overlay
+    path: /etc/modules-load.d/90-kubernetes.conf
+  - content: |
+      [keyfile]
+      unmanaged-devices=interface-name:cilium*;interface-name:lxc*
+    path: /etc/NetworkManager/conf.d/rke2-cilium.conf
+users:
+  - name: ${ssh_user}
+    groups: systemd-journal
+    ssh_authorized_keys:
+      - ${ssh_pubkey~}
+    sudo: ALL=(ALL) NOPASSWD:ALL

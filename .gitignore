@@ -1,0 +1,9 @@
+**/.terraform/
+**/*.tfstate*
+**/*.pem
+**/*.key
+**/rke2.yaml
+**/k3s.yaml
+**/local.yaml
+**/*.env
+**/.DS_Store

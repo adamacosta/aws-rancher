@@ -1,0 +1,18 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: external-dns
+  namespace: kube-system
+spec:
+  chart: external-dns
+  createNamespace: true
+  failurePolicy: reinstall
+  repo: https://kubernetes-sigs.github.io/external-dns
+  targetNamespace: external-dns
+  valuesContent: |-
+    provider:
+      name: aws
+    env:
+      - name: AWS_DEFAULT_REGION
+        value: us-east-2
+  version: 1.21.1

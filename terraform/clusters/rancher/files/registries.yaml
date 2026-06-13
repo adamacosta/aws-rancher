@@ -1,0 +1,15 @@
+mirrors:
+  docker.io:
+    endpoint:
+      - "https://registry.ranchercarbide.dev"
+  registry.rancher.com:
+    endpoint:
+      - "https://registry.ranchercarbide.dev"
+  registry.suse.com:
+    endpoint:
+      - "https://registry.ranchercarbide.dev"
+configs:
+  "registry.ranchercarbide.dev":
+    auth:
+      username: CHANGEME
+      password: CHANGEME

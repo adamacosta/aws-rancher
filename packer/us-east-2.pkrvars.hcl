@@ -1,0 +1,5 @@
+aws_region    = "us-east-2"
+instance_type = "m8a.xlarge"
+sles_version  = "16.0"
+subnet_id     = "subnet-095d88c4efe5abf6a"
+vpc_id        = "vpc-01c7511c87c5291ad"

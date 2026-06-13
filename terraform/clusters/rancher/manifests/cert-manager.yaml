@@ -1,0 +1,18 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: cert-manager
+  namespace: kube-system
+spec:
+  chart: oci://registry.ranchercarbide.dev/charts/cert-manager
+  createNamespace: true
+  dockerRegistrySecret: 
+    name: carbide-registry
+  failurePolicy: reinstall
+  targetNamespace: cert-manager
+  valuesContent: |-
+    crds:
+      enabled: true
+    global:
+      imageRegistry: registry.ranchercarbide.dev
+  version: 1.20.2

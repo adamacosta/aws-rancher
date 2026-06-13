@@ -1,0 +1,16 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: rancher
+  namespace: kube-system
+spec:
+  chart: oci://registry.ranchercarbide.dev/charts/rancher
+  createNamespace: true
+  dockerRegistrySecret: 
+    name: carbide-registry
+  failurePolicy: reinstall
+  targetNamespace: cattle-system
+  valuesContent: |-
+    hostname: rancher.rgsdemo.com
+    privateCA: true
+  version: 2.14.2

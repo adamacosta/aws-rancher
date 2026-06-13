@@ -1,0 +1,25 @@
+prefer_fqdn_over_hostname: true
+users:
+  - name: rancher
+    groups: systemd-journal
+    shell: /bin/bash
+%{ if length(pubkeys) > 0 ~}
+    ssh_authorized_keys:
+%{ for _ in pubkeys ~}
+      - ${_}
+%{ endfor ~}
+%{ endif ~}
+    sudo: ALL=(ALL) NOPASSWD:ALL
+  - name: etcd
+    no_create_home: true
+    shell: /sbin/nologin
+    system: true
+
+%{ if length(files) > 0 ~}
+write_files:
+%{ for _ in files ~}
+  - content: ${base64encode(_.content)}
+    encoding: b64
+    path: ${_.path}
+%{ endfor ~}
+%{ endif ~}
