@@ -180,6 +180,9 @@ spec:
   failurePolicy: reinstall
   targetNamespace: cattle-system
   valuesContent: |-
+    auditLog:
+      enabled: true
+      level: 2
     hostname: rancher.rgsdemo.com
     ingress:
       tls:

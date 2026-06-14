@@ -167,3 +167,9 @@ aws ec2 describe-instances \
   --output text \
   --no-cli-pager
 ```
+
+Please note this only applies on first deployment. Whenever the autoscaling group is refreshed with a new launch template to perform host OS and/or RKE2 updates, there will no longer be a cluster initializer as all nodes will join to the existing load balancer URL.
+
+## AWS Cloud Credential
+
+See [IAM Role & Instance Profile](https://rancherfederal.github.io/carbide-docs/docs/IC-cloud-support-docs/prereqs#iam-role--instance-profile). Rancher Government has a special feature not available to community Rancher allowing for the use of EC2 instance profiles for the Rancher cluster nodes rather than a long-lived access key to use the EC2 node driver. That is why we are attaching the role to the cluster's control plane profile rather than creating a user with an access key.

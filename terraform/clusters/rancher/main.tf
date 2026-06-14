@@ -27,13 +27,21 @@ data "http" "mykeys" {
   url = "https://github.com/adamacosta.keys"
 }
 
+data "aws_caller_identity" "current" {}
+
+data "aws_partition" "current" {}
+
+data "aws_region" "current" {}
+
 locals {
+  account_id          = data.aws_caller_identity.current.account_id
   ami_prefix          = "sles-rke2"
   aws_region          = "us-east-2"
   cidr                = "10.80.0.0/16"
   cluster_name        = "rancher"
   domain              = "rgsdemo.com"
   instance_type       = "m8a.xlarge"
+  partition           = data.aws_partition.current.partition
   private_subnets     = ["subnet-0d200b966b653aa6f", "subnet-0ea16bd6d9ee76679", "subnet-02727403a908ee26f"]
   public_subnets      = ["subnet-0d216efdf36457bb0", "subnet-0540c100ed2619ddd", "subnet-0e3eb6d8ec729416e"]
   servers             = 3
@@ -68,7 +76,7 @@ data "aws_route53_zone" "domain" {
 
 # Control-plane only for Rancher local
 module "rke2" {
-  source = "git@github.com:ranchergovernment/rke2-aws-tf.git?ref=patch/cloud-config"
+  source = "git@github.com:ranchergovernment/rke2-aws-tf.git?ref=main"
 
   lb_subnets = local.public_subnets
   subnets    = local.public_subnets
@@ -107,7 +115,7 @@ module "rke2" {
   })
 
   pre_userdata = file("${path.module}/scripts/pre-rke2.sh")
-  rke2_config = file("${path.module}/files/rke2-config.yaml")
+  rke2_config  = file("${path.module}/files/rke2-config.yaml")
 
   private_dns_name_options = {
     hostname_type = "resource-name"
