@@ -33,9 +33,21 @@ variable "name" {
   type        = string
 }
 
+variable "private_registry" {
+  default     = "registry.ranchercarbide.dev"
+  description = "Private registry for mirrors and system-default-registry"
+  type        = string
+}
+
 variable "region" {
   default     = null
   description = "Region to create nodes in"
+  type        = string
+}
+
+variable "registry_secret" {
+  default     = "carbide-registry"
+  description = "Secret in fleet-default namespace with basic-auth for system-default-registry"
   type        = string
 }
 

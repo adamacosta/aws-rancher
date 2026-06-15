@@ -1,0 +1,17 @@
+bpf:
+  distributedLRU:
+    enabled: true
+  mapDynamicSizeRatio: 0.08
+  masquerade: true
+  preallocateMaps: true
+bpfClockProbe: true
+envoy:
+  enabled: true
+hubble:
+  enabled: true
+  relay:
+    enabled: true
+routingMode: tunnel
+kubeProxyReplacement: true
+k8sServiceHost: localhost
+k8sServicePort: "6443"

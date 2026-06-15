@@ -34,12 +34,22 @@ CARBIDE_PASSWORD=$(aws secretsmanager get-secret-value \
   sed -E 's/^"|"$|\\//g' |
   jq -r '.carbide_password')
 
+# This will be used by the Helm controller to pull OCI
+# charts from the Carbide registry
 kubectl create secret docker-registry carbide-registry \
   --namespace kube-system \
   --docker-email="adam.acosta@ranchergovernment.com" \
   --docker-password="$CARBIDE_PASSWORD" \
   --docker-server="registry.ranchercarbide.dev" \
   --docker-username="$CARBIDE_USER"
+
+# This will be used as the registry auth secret for
+# downstream clusters to be able to use Carbide
+kubectl create secret generic carbide-registry \
+  --namespace fleet-default \
+  --type=kubernetes.io/basic-auth \
+  --from-literal=username="$CARBIDE_USER" \
+  --from-literal=password="$CARBIDE_PASSWORD"
 
 # Get a CLI auth token for Carbide's Harbor instance to query the distribution API
 CARBIDE_TOKEN=$(curl -sL -u "$CARBIDE_USER:$CARBIDE_PASSWORD" \

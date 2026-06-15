@@ -9,7 +9,3 @@ Rancher automatically creates a security group called "rancher-nodes" if no pre-
 The documentation for required IAM policies is not complete, either. The job will attempt to add an egress rule for IPv6, which not matter unless you're actually using a dual-stack or IPv6 network, but it will fail because of insufficient permissions. It needs `ec2:AuthorizeSecurityGroupEgress`, which is added in the IaC here but not shown in the documentation.
 
 See [Rancher AWS EC2 Security Group](https://ranchermanager.docs.rancher.com/v2.14/getting-started/installation-and-upgrade/installation-requirements/port-requirements#rancher-aws-ec2-security-group) for the default rules that Rancher creates for node driver clusters.
-
-### Troubleshooting
-
-If anything goes wrong during deployment, the Rancher logs and UI status will not show much detail. You need to look for the job created to create the machines in the `fleet-default` namespace. They will match the machine pool name. The pod logs for the job will show the error in enough detail to remediate.

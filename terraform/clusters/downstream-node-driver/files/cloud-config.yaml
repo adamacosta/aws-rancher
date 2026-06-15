@@ -1,0 +1,29 @@
+#cloud-config
+packages:
+  - jq
+  - rke2-selinux
+users:
+  - name: etcd
+    no_create_home: true
+    shell: /sbin/nologin
+    system: true
+run_cmd:
+  - - systemctl
+    - restart
+    - systemd-sysctl
+write_files:
+  - content: |
+      vm.panic_on_oom=0
+      vm.overcommit_memory=1
+      kernel.panic=10
+      kernel.panic_on_oops=1
+    path: /etc/sysctl.d/60-rke2.conf
+  - content: |
+      [rancher-rke2-common-stable]
+      name=Rancher RKE2 Common (stable)
+      baseurl=https://rpm.rancher.io/rke2/stable/common/slemicro/noarch
+      enabled=1
+      gpgcheck=1
+      repo_gpgcheck=1
+      gpgkey=https://rpm.rancher.io/public.key
+    path: /etc/zypp/repos.d/rancher-rke2.repo
