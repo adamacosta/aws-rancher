@@ -22,7 +22,7 @@ variable "cp_nodes" {
 }
 
 variable "instance_type" {
-  default     = "m5a.xlarge"
+  default     = "m8a.xlarge"
   description = "EC2 instance type of cluster nodes"
   type        = string
 }

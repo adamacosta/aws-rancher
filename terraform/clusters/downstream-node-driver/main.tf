@@ -86,6 +86,7 @@ resource "rancher2_machine_config_v2" "cp" {
   amazonec2_config {
     ami                        = local.ami_id
     http_protocol_ipv6         = "disabled"
+    http_tokens                = "optional"
     iam_instance_profile       = local.iam_instance_profile
     instance_type              = local.instance_type
     region                     = local.region
@@ -103,6 +104,7 @@ resource "rancher2_machine_config_v2" "cp" {
 
 resource "rancher2_cluster_v2" "ds1" {
   name               = local.name
+  default_pod_security_admission_configuration_template_name = "rancher-restricted"
   kubernetes_version = local.rke2_version
 
   rke_config {
@@ -153,18 +155,21 @@ resource "rancher2_cluster_v2" "ds1" {
       }
     }
 
-    machine_pools {
-      name                         = "workers"
-      cloud_credential_secret_name = data.rancher2_cloud_credential.ec2_node_driver.id
-      drain_before_delete          = true
-      quantity                     = local.worker_nodes
-      worker_role                  = true
+    dynamic "machine_pools" {
+      for_each = local.worker_nodes > 0 ? [1] : []
+      content {
+        name                         = "workers"
+        cloud_credential_secret_name = data.rancher2_cloud_credential.ec2_node_driver.id
+        drain_before_delete          = true
+        quantity                     = local.worker_nodes
+        worker_role                  = true
 
-      # For simplicity, we reuse the control plane machine config
-      # In reality, you'd probably want a larger instance type for app workloads
-      machine_config {
-        kind = rancher2_machine_config_v2.cp.kind
-        name = rancher2_machine_config_v2.cp.name
+        # For simplicity, we reuse the control plane machine config
+        # In reality, you'd probably want a larger instance type for app workloads
+        machine_config {
+          kind = rancher2_machine_config_v2.cp.kind
+          name = rancher2_machine_config_v2.cp.name
+        }
       }
     }
   }

@@ -80,7 +80,7 @@ data "aws_iam_policy_document" "instance_assume_role_policy" {
 }
 
 resource "aws_iam_role" "instance" {
-  name               = "instance_role"
+  name               = "aws_ccm_ebs_csi"
   assume_role_policy = data.aws_iam_policy_document.instance_assume_role_policy.json
 }
 
@@ -90,10 +90,9 @@ resource "aws_iam_role_policy" "aws_ccm" {
   policy = data.aws_iam_policy_document.aws_ccm.json
 }
 
-resource "aws_iam_role_policy" "ebs_csi" {
-  name   = "aws_ccm"
+resource "aws_iam_role_policy_attachment" "ebs_csi" {
   role   = aws_iam_role.instance.id
-  policy = data.aws_iam_policy.ebs_csi.policy
+  policy_arn = data.aws_iam_policy.ebs_csi.arn
 }
 
 resource "aws_iam_instance_profile" "aws_ccm_ebs_csi" {

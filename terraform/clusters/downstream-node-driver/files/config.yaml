@@ -23,7 +23,7 @@ kube-controller-manager-arg:
   - use-service-account-credentials=true
 kube-scheduler-arg:
   - tls-min-version=VersionTLS13
-pod-security-admission-config-file: /etc/rancher/rke2/rancher-pss.yaml
+node-name-from-cloud-provider-metadata: true
 profile: cis
 secrets-encryption: true
 selinux: true

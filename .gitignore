@@ -8,3 +8,6 @@
 **/ds*.yaml
 **/*.env
 **/.DS_Store
+**/*.zip
+**/*.tar*
+**/*.tgz

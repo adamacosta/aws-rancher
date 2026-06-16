@@ -1,13 +1,17 @@
 #cloud-config
+bootcmd:
+  - rpmkeys --import https://rpm.rancher.io/public.key
 packages:
   - jq
   - rke2-selinux
+password: $6$cu0E58rgcSL7WOr0$cyllVTFVwhqkRPi4kUFJaaWa5QNYREs5NrR5r2UXXHwWwAXQnR2.ZV.eekGunpcffpB4XyFCJ2zg4m41JLnS00
 users:
+  - default
   - name: etcd
     no_create_home: true
     shell: /sbin/nologin
     system: true
-run_cmd:
+runcmd:
   - - systemctl
     - restart
     - systemd-sysctl
