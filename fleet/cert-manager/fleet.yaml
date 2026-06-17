@@ -3,6 +3,7 @@ name: cert-manager
 helm:
   chart: cert-manager
   repo: https://charts.jetstack.io
+  takeOwnership: true
   version: 1.20.2
   values:
     config:
