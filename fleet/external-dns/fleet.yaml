@@ -1,4 +1,5 @@
 defaultNamespace: external-dns
+name: external-dns
 helm:
   chart: external-dns
   repo: https://kubernetes-sigs.github.io/external-dns

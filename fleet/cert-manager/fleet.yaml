@@ -1,8 +1,11 @@
 defaultNamespace: cert-manager
+name: cert-manager
 helm:
   chart: cert-manager
   repo: https://charts.jetstack.io
   version: 1.20.2
   values:
+    config:
+      enableGatewayAPI: true
     crds:
       enabled: true

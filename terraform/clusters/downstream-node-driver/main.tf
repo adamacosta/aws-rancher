@@ -25,36 +25,6 @@ locals {
   iam_instance_profile = aws_iam_instance_profile.aws_ccm_ebs_csi.name
 }
 
-module "ds_platform_prod" {
-  source = "./modules/cluster"
-
-  name = "ds-platform-prod"
-
-  aws_ccm_version      = local.aws_ccm_version
-  iam_instance_profile = local.iam_instance_profile
-  rke2_version         = "v1.35.4+rke2r1"
-
-  labels = {
-    env  = "prod"
-    type = "platform"
-  }
-}
-
-module "ds_platform_dev" {
-  source = "./modules/cluster"
-
-  name = "ds-platform-dev"
-
-  aws_ccm_version      = local.aws_ccm_version
-  iam_instance_profile = local.iam_instance_profile
-  rke2_version         = "v1.35.4+rke2r1"
-
-  labels = {
-    env  = "dev"
-    type = "platform"
-  }
-}
-
 module "ds_app_prod" {
   source = "./modules/cluster"
 
@@ -85,19 +55,9 @@ module "ds_app_dev" {
   }
 }
 
-output "ds_platform_prod" {
-  sensitive = true
-  value     = module.ds_platform_prod
-}
-
-output "ds_platform_dev" {
-  sensitive = true
-  value     = module.ds_platform_dev
-}
-
 output "ds_app_prod" {
   sensitive = true
-  value     = module.ds_platform_prod
+  value     = module.ds_app_prod
 }
 
 output "ds_app_dev" {
