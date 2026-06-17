@@ -1,6 +1,7 @@
 defaultNamespace: cert-manager
 helm:
-  repo: oci://registry.ranchercarbide.dev/charts/cert-manager
+  chart: cert-manager
+  repo: https://charts.jetstack.io/charts
   version: 1.20.2
   values:
     crds:
