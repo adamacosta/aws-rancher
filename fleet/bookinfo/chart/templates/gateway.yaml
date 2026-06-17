@@ -6,6 +6,7 @@ metadata:
   annotations:
     cert-manager.io/issuer: bookinfo-prod
 spec:
+  gatewayClassName: traefik
   listeners:
   - name: https
     port: 443
