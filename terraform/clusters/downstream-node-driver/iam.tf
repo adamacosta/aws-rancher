@@ -68,6 +68,34 @@ data "aws_iam_policy" "ebs_csi" {
   name = "AmazonEBSCSIDriverPolicy"
 }
 
+# Needed for cert-manager and external-dns
+data "aws_iam_policy_document" "dns" {
+  statement {
+    sid = ""
+    actions = [
+      "route53:ChangeResourceRecordSets",
+      "route53:ListResourceRecordSets",
+      "route53:ListTagsForResources"
+    ]
+    effect    = "Allow"
+    resources = ["arn:aws:route53:::hostedzone/*"]
+  }
+
+  statement {
+    sid       = ""
+    actions   = ["route53:ListHostedZones"]
+    effect    = "Allow"
+    resources = ["*"]
+  }
+
+  statement {
+    sid       = ""
+    actions   = ["route53:GetChange"]
+    effect    = "Allow"
+    resources = ["arn:aws:route53:::change/*"]
+  }
+}
+
 data "aws_iam_policy_document" "instance_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -88,6 +116,12 @@ resource "aws_iam_role_policy" "aws_ccm" {
   name   = "aws_ccm"
   role   = aws_iam_role.instance.id
   policy = data.aws_iam_policy_document.aws_ccm.json
+}
+
+resource "aws_iam_role_policy" "dns" {
+  name   = "update-dns"
+  role   = aws_iam_role.instance.id
+  policy = data.aws_iam_policy_document.dns.json
 }
 
 resource "aws_iam_role_policy_attachment" "ebs_csi" {
