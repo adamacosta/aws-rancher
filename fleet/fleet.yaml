@@ -9,6 +9,3 @@ helm:
         enabled: true
     defaultStorageClass:
       enabled: true
-    enableVolumeResizing: true
-    enableVolumeScheduling: true
-    enableVolumeSnapshot: true
