@@ -1,2 +1,5 @@
+providers:
+  kubernetesGateway:
+    enabled: true
 service:
   type: LoadBalancer
