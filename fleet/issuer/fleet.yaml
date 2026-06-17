@@ -2,3 +2,6 @@ defaultNamespace: bookinfo
 name: issuer
 dependsOn:
   - name: cert-manager
+    acceptedStates:
+      - Ready
+      - Modified
