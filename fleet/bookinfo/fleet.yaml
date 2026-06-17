@@ -7,6 +7,9 @@ dependsOn:
       - Modified
   - name: external-dns
   - name: issuer
+    acceptedStates:
+      - Ready
+      - Modified
 helm:
   chart: ./chart
 targetCustomizations:
