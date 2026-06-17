@@ -6,9 +6,10 @@ dependsOn:
 helm:
   chart: ./chart
 targetCustomizations:
-  helm:
-    values:
-      gateway:
-        enabled: true
-  clusterSelector:
-    env: prod
+  - name: prod
+    helm:
+      values:
+        gateway:
+          enabled: true
+    clusterSelector:
+      env: prod
