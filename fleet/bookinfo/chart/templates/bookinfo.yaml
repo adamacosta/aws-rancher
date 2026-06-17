@@ -76,6 +76,18 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9080
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
 ---
 ##################################################################################################
 # Ratings service
@@ -127,6 +139,18 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9080
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
 ---
 ##################################################################################################
 # Reviews service
@@ -181,11 +205,23 @@ spec:
           value: "/tmp/logs"
         ports:
         - containerPort: 9080
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
         volumeMounts:
         - name: tmp
           mountPath: /tmp
         - name: wlp-output
           mountPath: /opt/ibm/wlp/output
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       volumes:
       - name: wlp-output
         emptyDir: {}
@@ -221,11 +257,23 @@ spec:
           value: "/tmp/logs"
         ports:
         - containerPort: 9080
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
         volumeMounts:
         - name: tmp
           mountPath: /tmp
         - name: wlp-output
           mountPath: /opt/ibm/wlp/output
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       volumes:
       - name: wlp-output
         emptyDir: {}
@@ -261,11 +309,23 @@ spec:
           value: "/tmp/logs"
         ports:
         - containerPort: 9080
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
         volumeMounts:
         - name: tmp
           mountPath: /tmp
         - name: wlp-output
           mountPath: /opt/ibm/wlp/output
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       volumes:
       - name: wlp-output
         emptyDir: {}
@@ -326,9 +386,21 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9080
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
         volumeMounts:
         - name: tmp
           mountPath: /tmp
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       volumes:
       - name: tmp
         emptyDir: {}
