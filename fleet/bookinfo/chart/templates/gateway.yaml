@@ -25,6 +25,8 @@ kind: HTTPRoute
 metadata:
   name: bookinfo
 spec:
+  hostnames:
+  - bookinfo.rgsdemo.com
   parentRefs:
   - name: bookinfo-gateway
   rules:
