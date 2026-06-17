@@ -91,7 +91,7 @@ resource "aws_iam_role_policy" "aws_ccm" {
 }
 
 resource "aws_iam_role_policy_attachment" "ebs_csi" {
-  role   = aws_iam_role.instance.id
+  role       = aws_iam_role.instance.id
   policy_arn = data.aws_iam_policy.ebs_csi.arn
 }
 

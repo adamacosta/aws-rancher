@@ -1,0 +1,14 @@
+helm:
+  chart: aws-ebs-csi-driver
+  repo: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
+  version: 2.62.0
+  values:
+    controller:
+      region: us-east-2
+      volumeModificationFeature:
+        enabled: true
+    defaultStorageClass:
+      enabled: true
+    enableVolumeResizing: true
+    enableVolumeScheduling: true
+    enableVolumeSnapshot: true

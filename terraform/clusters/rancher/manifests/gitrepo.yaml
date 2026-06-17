@@ -1,0 +1,11 @@
+apiVersion: fleet.cattle.io/v1alpha1
+kind: GitRepo
+metadata:
+  name: rgs-demo
+  namespace: fleet-default
+spec:
+  repo: "git@github.com:adamacosta/aws-rancher"
+  branch: main
+  clientSecretName: ssh-key
+  paths:
+  - fleet

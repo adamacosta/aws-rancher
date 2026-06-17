@@ -10,6 +10,11 @@ variable "availability_zone" {
   type        = string
 }
 
+variable "aws_ccm_version" {
+  description = "Version of aws-cloud-controller-manager Helm chart to bootstrap with"
+  type        = string
+}
+
 variable "cp_nodes" {
   default     = 1
   description = "Number of control plane nodes"
@@ -21,15 +26,26 @@ variable "cp_nodes" {
   }
 }
 
+variable "iam_instance_profile" {
+  default     = null
+  description = "Name of EC2 instance profile to assign to cluster nodes"
+  type        = string
+}
+
 variable "instance_type" {
   default     = "m8a.xlarge"
   description = "EC2 instance type of cluster nodes"
   type        = string
 }
 
+variable "labels" {
+  default     = {}
+  description = "Labels to add to cluster"
+  type        = map(string)
+}
+
 variable "name" {
-  default     = "ds-ec2-node-driver"
-  description = "Name of machine pool"
+  description = "Name of cluster"
   type        = string
 }
 
@@ -52,7 +68,6 @@ variable "registry_secret" {
 }
 
 variable "rke2_version" {
-  default     = "v1.35.4+rke2r1"
   description = "Version of RKE2 to install on cluster"
   type        = string
 }
@@ -67,6 +82,12 @@ variable "security_groups" {
   default     = ["rancher-nodes"]
   description = "List of security groups to add cluster nodes to"
   type        = list(string)
+}
+
+variable "ssh_user" {
+  default     = "ec2-user"
+  description = "Name of cloud-init default for selected AMI"
+  type        = string
 }
 
 variable "subnet" {
