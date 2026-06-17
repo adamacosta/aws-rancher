@@ -1,4 +1,5 @@
 defaultNamespace: bookinfo
+name: bookinfo
 dependsOn:
   - name: cert-manager
   - name: external-dns

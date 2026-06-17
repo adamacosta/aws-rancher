@@ -1,4 +1,5 @@
 defaultNamespace: kube-system
+name: aws-ebs-csi-driver
 helm:
   chart: aws-ebs-csi-driver
   repo: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
