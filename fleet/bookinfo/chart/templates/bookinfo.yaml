@@ -82,7 +82,6 @@ spec:
             drop:
               - ALL
           privileged: false
-          readOnlyRootFilesystem: true
           runAsNonRoot: true
       securityContext:
         runAsNonRoot: true
@@ -145,7 +144,6 @@ spec:
             drop:
               - ALL
           privileged: false
-          readOnlyRootFilesystem: true
           runAsNonRoot: true
       securityContext:
         runAsNonRoot: true
@@ -211,7 +209,6 @@ spec:
             drop:
               - ALL
           privileged: false
-          readOnlyRootFilesystem: true
           runAsNonRoot: true
         volumeMounts:
         - name: tmp
@@ -263,7 +260,6 @@ spec:
             drop:
               - ALL
           privileged: false
-          readOnlyRootFilesystem: true
           runAsNonRoot: true
         volumeMounts:
         - name: tmp
@@ -315,7 +311,6 @@ spec:
             drop:
               - ALL
           privileged: false
-          readOnlyRootFilesystem: true
           runAsNonRoot: true
         volumeMounts:
         - name: tmp
@@ -392,7 +387,6 @@ spec:
             drop:
               - ALL
           privileged: false
-          readOnlyRootFilesystem: true
           runAsNonRoot: true
         volumeMounts:
         - name: tmp
