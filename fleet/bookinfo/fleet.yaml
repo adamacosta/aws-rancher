@@ -2,6 +2,9 @@ defaultNamespace: bookinfo
 name: bookinfo
 dependsOn:
   - name: cert-manager
+    acceptedStates:
+      - Ready
+      - Modified
   - name: external-dns
   - name: issuer
 helm:
