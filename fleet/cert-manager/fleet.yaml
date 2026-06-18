@@ -10,3 +10,4 @@ helm:
       enableGatewayAPI: true
     crds:
       enabled: true
+      keep: false

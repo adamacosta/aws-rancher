@@ -109,7 +109,7 @@ resource "rancher2_cluster_v2" "ds1" {
     chart_values = yamlencode(
       {
         rke2-cilium  = yamldecode(file("${path.module}/manifests/rke2-cilium-values.yaml"))
-        rke2-traefik = yamldecode(file("${path.module}/manifests/rke2-traefik-values.yaml"))
+        rke2-traefik = yamldecode(templatefile("${path.module}/manifests/rke2-traefik-values.yaml.tftpl", { labels = var.labels }))
       }
     )
 
