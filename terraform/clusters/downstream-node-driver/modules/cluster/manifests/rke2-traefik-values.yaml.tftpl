@@ -1,0 +1,15 @@
+gateway:
+  enabled: false
+logs:
+  access:
+    enabled: true
+    fields:
+      headers:
+        defaultmode: keep
+providers:
+  kubernetesGateway:
+    enabled: true
+%{ if labels["env"] == "prod" ~}
+service:
+  type: LoadBalancer
+%{ endif ~}
