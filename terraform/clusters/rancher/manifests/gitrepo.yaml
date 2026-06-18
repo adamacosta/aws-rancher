@@ -4,11 +4,9 @@ metadata:
   name: rgs-demo
   namespace: fleet-default
 spec:
-  repo: "git@github.com:adamacosta/aws-rancher"
-  revision: v0.1.0
+  repo: "git@github.com:adamacosta/fleet-demo"
+  branch: main
   clientSecretName: ssh-key
-  paths:
-    - fleet
   targets:
     - name: all
       clusterSelector: {}
