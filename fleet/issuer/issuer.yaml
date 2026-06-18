@@ -6,7 +6,7 @@ metadata:
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: bookinfo-issuer
+  name: bookinfo-prod
   namespace: bookinfo
 spec:
   acme:
