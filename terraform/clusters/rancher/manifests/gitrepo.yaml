@@ -5,7 +5,7 @@ metadata:
   namespace: fleet-default
 spec:
   repo: "git@github.com:adamacosta/aws-rancher"
-  branch: main
+  revision: v0.1.0
   clientSecretName: ssh-key
   paths:
     - fleet
