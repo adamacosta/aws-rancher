@@ -1,13 +1,7 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: bookinfo
----
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: bookinfo-prod
-  namespace: bookinfo
 spec:
   acme:
     email: adam.acosta@ranchergovernment.com
