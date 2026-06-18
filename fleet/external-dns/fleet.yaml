@@ -5,9 +5,10 @@ helm:
   repo: https://kubernetes-sigs.github.io/external-dns
   version: 1.21.1
   values:
-    provider:
-      name: aws
-    enableGatewayListenerSets: true
     env:
       - name: AWS_DEFAULT_REGION
         value: us-east-2
+    provider:
+      name: aws
+    sources:
+      - gateway-httproute

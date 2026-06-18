@@ -28,12 +28,15 @@ source .env
 
 This environment variable can now be used by the `rancher2` Terraform provider to create AND update resources.
 
-## Auth to downstream
+## Auth to downstreams
 
-The owner's `kubeconfig` is added as a Terraform output. To use it:
+The cluster owner's JWT `kubeconfig` is added as a Terraform output to each downstream. To save them:
 
 ```sh
-terraform output -raw kube_config > ds.yaml
-chmod 0600 ds.yaml
-export KUBECONFIG="$(pwd)/ds.yaml"
+for cluster in $(terraform output -json | jq 'keys[]'); do
+  terraform output -json | jq -r --arg cluster "$cluster" '.[$cluster] | .value.kube_config' > "${cluster}.yaml"
+  chmod 0600 "${cluster}.yaml"
+done
 ```
+
+Note this only works in `zsh` if `setopt SH_WORD_SPLIT` has been set. Otherwise, `zsh` does not split strings with whitespace into arrays.
