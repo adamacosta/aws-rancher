@@ -4,7 +4,7 @@ metadata:
   name: bookinfo
 ---
 apiVersion: cert-manager.io/v1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   name: bookinfo-prod
   namespace: bookinfo

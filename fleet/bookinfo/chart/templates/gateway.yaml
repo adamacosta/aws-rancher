@@ -4,7 +4,7 @@ kind: Gateway
 metadata:
   name: bookinfo-gateway
   annotations:
-    cert-manager.io/issuer: bookinfo-prod
+    cert-manager.io/cluster-issuer: bookinfo-prod
 spec:
   gatewayClassName: traefik
   listeners:
