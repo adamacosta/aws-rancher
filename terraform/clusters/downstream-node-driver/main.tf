@@ -31,8 +31,10 @@ module "ds_app_prod" {
   name = "ds-app-prod"
 
   aws_ccm_version      = local.aws_ccm_version
+  cp_nodes             = 3
   iam_instance_profile = local.iam_instance_profile
   rke2_version         = "v1.35.4+rke2r1"
+  worker_nodes         = 1
 
   labels = {
     env  = "prod"
@@ -46,8 +48,10 @@ module "ds_app_dev" {
   name = "ds-app-dev"
 
   aws_ccm_version      = local.aws_ccm_version
+  cp_nodes             = 3
   iam_instance_profile = local.iam_instance_profile
   rke2_version         = "v1.35.4+rke2r1"
+  worker_nodes         = 1
 
   labels = {
     env  = "dev"
