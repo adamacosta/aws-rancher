@@ -9,3 +9,6 @@ spec:
   clientSecretName: ssh-key
   paths:
     - fleet
+  targets:
+    - name: all
+      clusterSelector: {}
