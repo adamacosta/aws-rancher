@@ -1,4 +1,4 @@
-formatter: "" # this is required
+formatter: "markdown table" # this is required
 
 version: ""
 
@@ -17,12 +17,12 @@ sections:
 content: ""
 
 output:
-  file: ""
+  file: "README.md"
   mode: inject
   template: |-
     <!-- BEGIN_TF_DOCS -->
     {{ .Content }}
-    <!-- END_TF_DOCS -->    
+    <!-- END_TF_DOCS -->
 
 output-values:
   enabled: false

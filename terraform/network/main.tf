@@ -18,13 +18,15 @@ provider "aws" {
 
 data "aws_availability_zones" "available" {}
 
+data "aws_region" "current" {}
+
 locals {
   azs             = slice(data.aws_availability_zones.available.names, 0, 3)
-  cidr            = "10.100.0.0/16"
-  domain          = "rgsdemo.com"
-  name            = "aacosta-demo"
-  region          = "us-east-2"
-  vpn_client_cidr = "172.22.0.0/16"
+  cidr            = var.cidr
+  domain          = var.domain
+  name            = var.name
+  region          = var.region == null ? data.aws_region.current.region : var.region
+  vpn_client_cidr = var.vpn_client_cidr
 
   tags = {
     Terraform = "true"
