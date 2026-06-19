@@ -1,5 +1,0 @@
-# TLS settings
-
-We choose to externally provision the server certificate for Rancher, even though we are using Let's Encrypt, because Rancher's automatic Let's Encrypt integration uses http01 domain validation and we want to use dns01, allowing `cert-manager` to use the same IAM policy as `external-dns`, writing records to the Route53 public hosted zone for `rgsdemo.com`, which is a domain registered through AWS.
-
-Doing this requires we use the `privateCA: true` Helm value and provide the Let's Encrypt root CA certificate in the `tls-ca` secret. This is created automatically via `cloud-init` user-data after RKE2 starts up and `cert-manager` is installed. The CA certificates can be found at [Chains of Trust](https://letsencrypt.org/certificates/) on the Let's Encrypt home page. The certificate we get is issued by the YR1 intermediate, which is signed by the offline ISRG Root X1. The user-data script downloads the pem-encoded CA certificate from the known URL retrieved from this page.

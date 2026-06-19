@@ -113,7 +113,7 @@ registry.ranchercarbide.dev/rancher/rke2-cloud-provider                     v1.3
 registry.ranchercarbide.dev/rancher/rke2-runtime                            v1.35.5-rke2r2                                                3729785e2f271       101MB
 ```
 
-Explain `containerd` registry mirrors and why some of these show up as coming from Carbide registry, but still come from there because of the mirror.
+Explain `containerd` registry mirrors and why some of these show up as coming from the Carbide registry and some do not, but still come from there because of the mirror. The only exception is the AWS `cloud-controller-manager` image coming from the k8s upstream registry because it is not available from Carbide. When showing the mirrors from the `registries.yaml` file, be careful to only show the mirrors and not the config to avoid spilling credentials:
 
 ```console
 # yq '.mirrors' /etc/rancher/rke2/registries.yaml
@@ -128,7 +128,7 @@ registry.suse.com:
     - "https://registry.ranchercarbide.dev"
 ```
 
-Everything that shows up as being from Carbide is because it was pre-loaded into `containerd` local content store rather than pulled.
+Everything that shows up as being from Carbide is because it was pre-loaded into the `containerd` local content store rather than pulled. These images are preloaded from the Hauler seed store created during the `packer` build for the AMI used for Rancher's local cluster. To see what is in there, we can extract the `index.json` file from the tarred OCI layout and examine it:
 
 ```console
 # zstd -cd /var/lib/rancher/rke2/agent/images/seed.tar.zst | tar -xO -f - index.json | jq -r '.manifests[] | .annotations."io.containerd.image.name"'

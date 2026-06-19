@@ -171,8 +171,6 @@ ui.cattle.io
 upgrade.cattle.io
 ```
 
-
-
 To get a full list of all CRDs in `cattle.io` namespace from the API server:
 
 ```console
@@ -265,4 +263,6 @@ vmwarevspheremachines.rke-machine.cattle.io
 vmwarevspheremachinetemplates.rke-machine.cattle.io
 ```
 
-To understand why these are different lists, note that all of the resources under the `ext.cattle.io` namespace are not CRDs but rather APIs that are delegated via the `kube-apiserver`'s [aggregation layer](https://kubernetes.io/docs/tasks/extend-kubernetes/configure-aggregation-layer/) rather than installed into the API server directly as CRDs. This means Rancher registers these with the API server, taking control of those paths underneath the `/apis/` path matching the resource groups, versions, and kinds that are registered. When these APIs are called, the API server proxies the call to Rancher rather than handling them directly. This can have implications on API availability if you deploy the control plane in an HA manner with at least 3 nodes, but run Rancher with only 1 replica. This is why you will sometimes see errors when using `kubectl` indicating errors querying for APIs having to do with metrics. This is because the Kubernetes metrics server is an API extension that is typically deployed with a single replica, so when its only pod is unavailable, all of the API resources it is responsible become unavailable and the Kubernetes API server returns errors when attempting to forward requests to the registered proxy and getting no response. Read [Setup an Extension API Server](https://kubernetes.io/docs/tasks/extend-kubernetes/setup-extension-api-server/) to understand how Rancher does this.
+To understand why these are different lists, note that all of the resources under the `ext.cattle.io` namespace are APIs that are delegated via the `kube-apiserver`'s [aggregation layer](https://kubernetes.io/docs/tasks/extend-kubernetes/configure-aggregation-layer/) rather than installed into the API server directly as CRDs. This means Rancher registers these with the API server, taking control of those paths underneath the `/apis/` path matching the resource groups, versions, and kinds that are registered. When these APIs are called, the API server proxies the call to Rancher rather than handling them directly. Read [Setup an Extension API Server](https://kubernetes.io/docs/tasks/extend-kubernetes/setup-extension-api-server/) to understand how Rancher does this.
+
+This can have implications on API availability if you deploy the control plane in an HA manner with at least 3 nodes, but run Rancher with only 1 replica. This is why you will sometimes see errors when using `kubectl` saying it cannot find APIs that are handled by the metrics server. This is because the Kubernetes metrics server is an API extension that is typically deployed with a single replica, so when its only pod is unavailable, all of the API resources it is responsible for become unavailable and the Kubernetes API server returns errors when attempting to forward requests to the registered proxy and getting no response. Since the metrics server's data output is what gets used by the HPA and VPA to autoscale other resources, when it becomes unavailable, autoscaling will also stop working.
