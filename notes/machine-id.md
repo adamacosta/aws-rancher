@@ -1,6 +1,6 @@
 # `machine-id`
 
-The guide for [Building Images Safely](https://systemd.io/BUILDING_IMAGES/) provided by `systemd` indicates some standard cleanup that should be done on a machine image before distributing, such that deployed systemd end up unique. One of these is removing the `machine-id` in `/etc/machine-id`. However, when attempting to do at first, EC2 instances booted without a `machine-id` never became reachable over the network. To figure out why, I enabled the serial console and found that it was prompting interactively for a keymap.
+The guide for [Building Images Safely](https://systemd.io/BUILDING_IMAGES/) provided by `systemd` indicates some standard cleanup that should be done on a machine image before distributing it, such that deployed systems end up unique. One of these is removing the `machine-id` in `/etc/machine-id`. However, when attempting to do this at first, EC2 instances booted without a `machine-id` never became reachable over the network. To figure out why, I enabled the serial console and found that it was prompting interactively for a keymap.
 
 The following prompt is shown:
 
@@ -147,7 +147,7 @@ INITIALIZATION
        read-only during early boot but become writable later on.
 ```
 
-In fact, it does turn out that the hypervisor UUID is used:
+In fact, it turns out that the hypervisor UUID is used:
 
 ```console
 ip-10-100-86-229:~ # cat /etc/machine-id
