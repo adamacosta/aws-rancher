@@ -1,30 +1,31 @@
 #!/bin/bash
 set -xe
 
-# info logs the given argument at info log level.
 info() {
     echo "[INFO] " "$@"
 }
 
-# warn logs the given argument at warn log level.
 warn() {
     echo "[WARN] " "$@" >&2
 }
 
-# fatal logs the given argument at fatal log level.
 fatal() {
     echo "[ERROR] " "$@" >&2
     exit 1
 }
 
 get_installer() {
-  info 'Curl-ing RKE2 install script from'
+  info 'Curl-ing RKE2 install script from https://get.rke2.io'
   curl -fsLS https://get.rke2.io -o install.sh
   info 'RKE2 install script downloaded'
 }
 
+# awscli is used by cloud-init when the cluster nodes are first booted
+# to determine what cluster a node belongs to, whether it should be
+# the control plane initializer, join an existing cluster as a control
+# plane node, or join as a worker node. It is also used to retrieve
+# and distribute the cluster's join token and admin kubeconfig.
 install_awscli() {
-  # Install awscli (used for secrets fetching)
   rpm -qa | grep aws | xargs zypper remove -y
   info 'Installing AWSCLI'
   curl -fsLS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
@@ -44,9 +45,13 @@ install_helm() {
   curl -sL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 | bash
 }
 
+# We install all of the rke2-common, rke2-server, and rke2-agent rpms in order
+# to have a single AMI rather than two for control planes and non control planes.
+# Most of the files are in the rke2-common package, with only the systemd service
+# units in the -server and -agent packages, so all nodes end up with a single
+# unused service unit.
 install_rke2() {
   info "Installing RKE2"
-  # Installing both server and agent services to allow for single AMI
   INSTALL_RKE2_VERSION=$(curl -sL https://update.rke2.io/v1-release/channels | jq -r '.data[] | select(.id=="stable").latest')
   export INSTALL_RKE2_VERSION
   INSTALL_RKE2_TYPE=server INSTALL_RKE2_METHOD=rpm sh ./install.sh
