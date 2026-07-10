@@ -1,6 +1,8 @@
 users:
   - name: adam
+    lock_passwd: false
     groups: systemd-journal
+    passwd: $6$9CbEoUUY4q.6hqRy$vcDofTZuKix0g8iRex1Jw3k0.Cp7MkLEOPMXDc1DepcpL165fEGqgQ1DSQnMOvrEe1cFsojsCqYnb9spceajB0
     shell: /bin/bash
 %{ if length(pubkeys) > 0 ~}
     ssh_authorized_keys:
