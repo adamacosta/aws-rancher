@@ -2,6 +2,47 @@
 
 We are creating a VPC with three public and three private subnets, tied to availability zones `a`, `b`, and `c` of the respective region chosen, which defaults to `us-east-2` for no good reason other than it is geographically closest to me. A VPN client endpoint is also created but appears not to work currently the AWS account we use for internal operations does not seem to allow the default SAML provider to be used. We can only use Okta to authenticate to IAM identity center but have no ability as SAs/FEs to configure Okta for this to work. A workable VPN probably needs to use client certificate authentication instead, which will be attempted in the future. This same setup worked for a customer that used Azure Entra ID as the IDP behind IAM identity center, but we were able to instruct their corporate IT on how to setup a SAML application in Entra ID for IAM identity center to use.
 
+## Bastion Host
+
+```sh
+SUSEConnect -p PackageHub/15.7/x86_64
+sudo zypper update -y
+sudo zypper install -t pattern -y git gnome_basic MozillaFirefox zsh
+wget https://github.com/kasmtech/KasmVNC/releases/download/v1.4.0/kasmvncserver_opensuse_15_1.4.0_x86_64.rpm
+sudo zypper install -y kasmvncserver_opensuse_15_1.4.0_x86_64.rpm
+sudo systemctl reboot
+```
+
+```sh
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc &&
+echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/zypp/repos.d/vscode.repo > /dev/null
+sudo zypper addrepo https://download.opensuse.org/repositories/home:/flavio_castelli:/ghostty/15.6/home:flavio_castelli:ghostty.repo
+sudo zypper addrepo https://download.opensuse.org/repositories/isv:/kubernetes:/core:/stable:/v1.35/rpm/isv:kubernetes:core:stable:v1.35.repo
+sudo zypper --gpg_auto-import-keys install -y code ghostty helm kubectl
+sudo zypper remove -y aws-cli
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+curl -fsSL https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_linux_amd64.zip -o terraform.zip
+unzip terraform.zip
+sudo mv terraform /usr/local/bin
+curl -fsSL https://releases.hashicorp.com/packer/1.15.4/packer_1.15.4_linux_amd64.zip -o packer.zip
+unzip packer.zip
+sudo mv packer /usr/local/bin
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+cat <<EOF > "$HOME/.oh-my-zsh/custom/themes/custom.zsh-theme"
+if [ $UID -eq 0 ]; then NCOLOR="red"; else NCOLOR="white"; fi
+
+PROMPT='%{$fg[$NCOLOR]%}%B%n@%m%b%{$reset_color%} %{$fg[blue]%}%B%c%b%{$reset_color%} $(git_prompt_info)%(!.#.$) '
+
+# git theming
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}(%{$fg_no_bold[yellow]%}%B"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%b%{$fg_bold[blue]%})%{$reset_color%} "
+ZSH_THEME_GIT_PROMPT_CLEAN=""
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg_bold[red]%}✗"
+EOF
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 

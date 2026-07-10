@@ -12,9 +12,7 @@ terraform {
   }
 }
 
-provider "aws" {
-  region = local.region
-}
+provider "aws" {}
 
 data "aws_availability_zones" "available" {}
 
@@ -70,88 +68,88 @@ module "vpc" {
   tags = local.tags
 }
 
-resource "aws_acm_certificate" "vpn" {
-  domain_name       = "vpn.${local.domain}"
-  validation_method = "DNS"
-}
+# resource "aws_acm_certificate" "vpn" {
+#   domain_name       = "vpn.${local.domain}"
+#   validation_method = "DNS"
+# }
 
-resource "aws_route53_record" "vpn_certificate_validation" {
-  for_each = {
-    for dvo in aws_acm_certificate.vpn.domain_validation_options : dvo.domain_name => {
-      name   = dvo.resource_record_name
-      record = dvo.resource_record_value
-      type   = dvo.resource_record_type
-    }
-  }
+# resource "aws_route53_record" "vpn_certificate_validation" {
+#   for_each = {
+#     for dvo in aws_acm_certificate.vpn.domain_validation_options : dvo.domain_name => {
+#       name   = dvo.resource_record_name
+#       record = dvo.resource_record_value
+#       type   = dvo.resource_record_type
+#     }
+#   }
 
-  allow_overwrite = true
-  name            = each.value.name
-  records         = [each.value.record]
-  ttl             = 60
-  type            = each.value.type
-  zone_id         = data.aws_route53_zone.domain.zone_id
-}
+#   allow_overwrite = true
+#   name            = each.value.name
+#   records         = [each.value.record]
+#   ttl             = 60
+#   type            = each.value.type
+#   zone_id         = data.aws_route53_zone.domain.zone_id
+# }
 
-resource "aws_iam_saml_provider" "vpn" {
-  name                   = "aws-client-vpn"
-  saml_metadata_document = data.aws_iam_saml_provider.sso.saml_metadata_document
-}
+# resource "aws_iam_saml_provider" "vpn" {
+#   name                   = "aws-client-vpn"
+#   saml_metadata_document = data.aws_iam_saml_provider.sso.saml_metadata_document
+# }
 
-resource "aws_security_group" "vpn" {
-  name        = "${local.name}-vpn-sg"
-  description = "Allow VPN access"
-  vpc_id      = module.vpc.vpc_id
+# resource "aws_security_group" "vpn" {
+#   name        = "${local.name}-vpn-sg"
+#   description = "Allow VPN access"
+#   vpc_id      = module.vpc.vpc_id
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = [local.cidr]
-  }
+#   egress {
+#     from_port   = 0
+#     to_port     = 0
+#     protocol    = "-1"
+#     cidr_blocks = [local.cidr]
+#   }
 
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 
-resource "aws_ec2_client_vpn_endpoint" "vpn" {
-  description            = "${local.name}-clientvpn"
-  server_certificate_arn = aws_acm_certificate.vpn.arn
-  client_cidr_block      = local.vpn_client_cidr
-  dns_servers            = [cidrhost(local.cidr, 2)]
-  security_group_ids     = [aws_security_group.vpn.id]
-  self_service_portal    = "disabled"
-  split_tunnel           = true
-  vpc_id                 = module.vpc.vpc_id
+# resource "aws_ec2_client_vpn_endpoint" "vpn" {
+#   description            = "${local.name}-clientvpn"
+#   server_certificate_arn = aws_acm_certificate.vpn.arn
+#   client_cidr_block      = local.vpn_client_cidr
+#   dns_servers            = [cidrhost(local.cidr, 2)]
+#   security_group_ids     = [aws_security_group.vpn.id]
+#   self_service_portal    = "disabled"
+#   split_tunnel           = true
+#   vpc_id                 = module.vpc.vpc_id
 
-  authentication_options {
-    type              = "federated-authentication"
-    saml_provider_arn = aws_iam_saml_provider.vpn.arn
-  }
+#   authentication_options {
+#     type                       = "certificate-authentication"
+#     root_certificate_chain_arn = aws_acm_certificate.vpn.arn
+#   }
 
-  connection_log_options {
-    enabled = false
-  }
+#   connection_log_options {
+#     enabled = false
+#   }
 
-  tags = {
-    Name = "${local.name}"
-  }
-}
+#   tags = {
+#     Name = "${local.name}"
+#   }
+# }
 
-resource "aws_ec2_client_vpn_network_association" "vpn" {
-  for_each = tomap({
-    for i, id in module.vpc.private_subnets : i => id
-  })
+# resource "aws_ec2_client_vpn_network_association" "vpn" {
+#   for_each = tomap({
+#     for i, id in module.vpc.private_subnets : i => id
+#   })
 
-  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.vpn.id
-  subnet_id              = each.value
-}
+#   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.vpn.id
+#   subnet_id              = each.value
+# }
 
-resource "aws_ec2_client_vpn_authorization_rule" "vpn" {
-  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.vpn.id
-  target_network_cidr    = local.cidr
-  authorize_all_groups   = true
-}
+# resource "aws_ec2_client_vpn_authorization_rule" "vpn" {
+#   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.vpn.id
+#   target_network_cidr    = local.cidr
+#   authorize_all_groups   = true
+# }
 
 output "vpc" {
   value = module.vpc

@@ -1,0 +1,11 @@
+users:
+  - name: adam
+    groups: systemd-journal
+    shell: /bin/bash
+%{ if length(pubkeys) > 0 ~}
+    ssh_authorized_keys:
+%{ for _ in pubkeys ~}
+      - ${_}
+%{ endfor ~}
+%{ endif ~}
+    sudo: ALL=(ALL) NOPASSWD:ALL
