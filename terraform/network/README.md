@@ -22,7 +22,9 @@ sudo zypper addrepo https://download.opensuse.org/repositories/home:/flavio_cast
 sudo zypper addrepo https://download.opensuse.org/repositories/isv:/kubernetes:/core:/stable:/v1.35/rpm/isv:kubernetes:core:stable:v1.35.repo
 sudo zypper addrepo https://download.opensuse.org/repositories/shells:/zsh-users:/zsh-autosuggestions/SLE_15/shells:zsh-users:zsh-autosuggestions.repo
 sudo zypper addrepo https://download.opensuse.org/repositories/shells:/zsh-users:/zsh-syntax-highlighting/SLE_15/shells:zsh-users:zsh-syntax-highlighting.repo
-sudo zypper --gpg_auto-import-keys install -y code ghostty helm kubectl zsh-autosuggestions zsh-syntax-highlighting
+sudo zypper addrepo https://download.opensuse.org/repositories/GNOME:/STABLE:/45/SLE_15_SP6/GNOME:STABLE:45.repo
+sudo zypper addrepo https://download.opensuse.org/repositories/games:/tools/16.0/games:tools.repo
+sudo zypper --gpg_auto-import-keys install -y code discord ghostty gnome-backgrounds helm kubectl zsh-autosuggestions zsh-syntax-highlighting
 sudo zypper remove -y aws-cli
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
@@ -56,10 +58,56 @@ alias clar='clear'
 alias vim='nvim'
 alias ls='ls --color=auto'
 EOF
+cat <<EOF > "$HOME/.oh-my-zsh/custom/env.zsh"
+export EDITOR=nvim
+eval "$(dircolors)"
+EOF
 cat <<EOF >> "$HOME/.zshrc"
 . /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 . /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 EOF
+mkdir -p "$HOME/.config/git" &&
+cat <<EOF > "$HOME/.config/git/config"
+[core]
+    compression = 9
+    editor = nvim
+    excludesfile = ~/.config/git/.gitignore
+
+[fetch]
+    parallel = 0
+    prune = true
+    pruneTags = true
+
+[grep]
+    extendedRegexp = true
+    lineNumber = true
+
+[help]
+    autocorrect = 20
+
+[init]
+    defaultBranch = main
+
+[pull]
+    rebase = true
+
+[push]
+    autoSetupRemote = true
+
+[user]
+    email = adamacosta@users.noreply.github.com
+    name = Adam Acosta
+EOF
+cat <<EOF >> "$HOME/.config/ghostty/config"
+background-opacity: 0.8
+EOF
+```
+
+To use the IMDS:
+
+```sh
+TOKEN=$(curl -sX PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data
 ```
 
 <!-- BEGIN_TF_DOCS -->
